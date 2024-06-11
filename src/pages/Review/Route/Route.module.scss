@@ -1,0 +1,18 @@
+.btn-show {
+    background-color: #fafafa;
+}
+
+.bg {
+    background-color: #e8e8e8;
+}
+
+.line {
+    background-color: #3671f6;
+    transition: all ease-in-out 0.3s;
+    width: 100px;
+    position: absolute;
+    height: 2px;
+    border-radius: 16px;
+    bottom: -9px;
+    transform: translateX(0px);
+}

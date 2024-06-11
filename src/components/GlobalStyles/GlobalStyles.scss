@@ -1,0 +1,93 @@
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins:wght@200;300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap');
+
+:root {
+    --bg-gray: #f8f8f8;
+    --bg-hover: #e4efff;
+    --main-text-color-gray: #585858;
+    --warning: #f6931c;
+    --warningL7: #ffddb5;
+    --link: #1777ff;
+    --highlight-L: #0573ff;
+    --highlight: #255dec;
+    --highlightL: #1640aa;
+    --red-main: #e74b3c;
+    --layout-border: #f0f0f0;
+    --white-opacity-10: #ffffff10;
+    --white-opacity-15: #ffffff15;
+    --white-opacity-17: #ffffff17;
+    --white-opacity-20: #ffffff20;
+    --white-opacity-25: #ffffff25;
+    --white-opacity-30: #ffffff30;
+    --white-opacity-main: #ffffffa8;
+    --black-op-l1: #0000001a;
+    --success-color: #00aa9a;
+    --transparent: #00000000;
+    --main-bg: #e8e8e8;
+    --main-bg-op: #fafafa;
+    --black: #000000;
+    --black-op: #0000009c;
+    --placeholder-text: #272727;
+    --placeholder-text-l: #6f6f6f;
+    --white: #ffffff;
+    --gray-main: #969696;
+    --gray-main-700: #b1b1b1;
+    --gray-main-500: #cccccc;
+    --gray-main-300: #e6e6e6;
+    --main-icon-color: #333333;
+    --layout-border-color: #f0f0f0;
+    --main-text-color-gray-l: #74788d;
+    --main-text-color-gray-l2: #787878;
+    --main-table-title-bg: #e8e8e8;
+    --main-border-layout: #f0f0f0;
+    --mask-bg: #000000aa;
+    --tooltip-bg: #000000aa;
+    --main-text-size: 13px;
+    --main-border-l: #cdcdcd;
+    --main-border-l-1: #e3e3e3;
+    --main-border: #dbdbdb;
+    --hover-white-to-gray: #dddddd;
+    --hover-white-to-gray-l1: #f5f5f5;
+    --hover-white-to-gray-l2: #fafafa;
+    --main-text-color: #000000;
+    --running-color: #00aa9a;
+    --offline-color: #000000;
+    --offline-svg-color: #555555;
+    --offline-sgv-color: #555555;
+    --lostgps-color: #891ca2;
+    --stopped-color: #e74b3c;
+    --stopR-color: #0099ce;
+    --red-color: #ff4d4f;
+    --red-color-l3: #e96c60;
+    --red-color-l: #e31300;
+    --warning-color: #f6931c;
+    --warning-L7: #ffddb5;
+    --line-color: #fa8c06;
+    --line-border-color: #255dec;
+    --link-color: #255dec;
+    --highlight-color: #255dec;
+    --fine-color: #255dec;
+    --wexpire-color: #f6931c;
+    --other-color: #3064e4;
+    --lock-color: #000000;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito Sans', sans-serif !important;
+}
+
+.z-1000 {
+    z-index: 1000;
+}
+
+.border {
+    border: 1px solid #cdcdcd;
+}
+
+.border-t-0 {
+    border-top: none;
+}

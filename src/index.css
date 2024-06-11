@@ -25,6 +25,10 @@ code {
     width: 100vw;
 }
 
+.leaflet-control-container .leaflet-routing-container-hide {
+    display: none;
+}
+
 .cluster-icon {
     background-color: #333;
     height: 2em;

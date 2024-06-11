@@ -1,0 +1,8 @@
+.wrapper {
+    .menu-item {
+        transition: 0.3s;
+        &:hover {
+            background-color: var(--main-bg);
+        }
+    }
+}

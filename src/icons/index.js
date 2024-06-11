@@ -1,1 +1,10 @@
-export { CarIcon } from './Icon';
+export {
+    EmptyIcon,
+    RouteIcon,
+    GeoAreaIcon,
+    GirdIcon,
+    VideoIcon,
+    ImageIcon,
+    RatioIcon,
+    SettingIcon
+} from './Icon';
