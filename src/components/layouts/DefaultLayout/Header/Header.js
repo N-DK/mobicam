@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import styles from './Header.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DownOutlined } from '@ant-design/icons';
 import {
     faBell,
     faChevronDown,
@@ -15,6 +16,7 @@ import {
     RouteIcon,
     VideoIcon,
 } from '~/icons';
+import { Dropdown, Menu, Space } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -107,36 +109,46 @@ function Header() {
                             key={item.id}
                             className={`${cx(
                                 'menu-item',
-                            )} relative text-xs rounded-full ml-1 mr-1`}
+                            )}  relative text-xs rounded-full ml-1 mr-1`}
                         >
-                            <Link
-                                to={item.path}
-                                className={`${cx(
-                                    '',
-                                )}  p-2 flex items-center justify-center uppercase`}
+                            <Dropdown
+                                placement="bottom"
+                                overlay={
+                                    <Menu style={{ borderRadius: 4 }}>
+                                        {item.subMenu &&
+                                            item.subMenu.map(
+                                                (subItem, index) => (
+                                                    <Menu.Item key={index}>
+                                                        <Link
+                                                            to={subItem.path}
+                                                            className="flex items-center"
+                                                        >
+                                                            {subItem.icon}
+                                                            <span className="ml-2">
+                                                                {subItem.name}
+                                                            </span>
+                                                        </Link>
+                                                    </Menu.Item>
+                                                ),
+                                            )}
+                                    </Menu>
+                                }
+                                trigger={['click']}
                             >
-                                {item.name}
-                                {item.icon && (
-                                    <FontAwesomeIcon
-                                        icon={item.icon}
-                                        className="ml-2.5 -mt-0.5"
-                                    />
-                                )}
-                            </Link>
-                            {menuId === item.id && item.subMenu.length > 0 && (
-                                <div className="absolute top-full mt-1 bg-white shadow-md rounded left-1/2 -translate-x-1/2 w-max min-w-28 z-1000">
-                                    {item.subMenu.map((subItem, index) => (
-                                        <Link
-                                            to={subItem.path}
-                                            key={index}
-                                            className="flex items-center p-2"
-                                        >
-                                            {subItem.icon}
-                                            <span className='ml-2'>{subItem.name}</span>
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
+                                <Link
+                                    to={item.path}
+                                    className={`${cx(
+                                        '',
+                                    )}  p-2 flex items-center justify-center uppercase`}
+                                >
+                                    <Space>
+                                        {item.name}
+                                        {item.subMenu.length > 0 && (
+                                            <DownOutlined />
+                                        )}
+                                    </Space>
+                                </Link>
+                            </Dropdown>
                         </li>
                     ))}
                 </ul>

@@ -16,3 +16,10 @@
     bottom: -9px;
     transform: translateX(0px);
 }
+
+
+.page.active {
+    background-color: #fafafa;
+    border: 1px solid #3671f6;
+    color: #3671f6;
+}

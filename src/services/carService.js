@@ -23,13 +23,13 @@ export const getTrackList = async () => {
         const res = await requestV1.post(
             'trackList',
             {
-                startDate: '2024-06-11',
-                endDate: '2024-06-11',
+                startDate: '2024-06-12',
+                endDate: '2024-06-12',
                 startTime: '00:00:00',
                 endTime: '23:59:59',
                 company: 1,
-                devId: '08944FDDBT',
-                vid: '50G02619',
+                devId: '08944FEE7T',
+                vid: '50G02648',
             },
             {
                 headers: {
