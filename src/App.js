@@ -1,5 +1,10 @@
 import 'leaflet/dist/leaflet.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+} from 'react-router-dom';
 import { publicRoutes } from './routes';
 import { DefaultLayout } from './components/layouts/DefaultLayout';
 
@@ -14,6 +19,7 @@ function App() {
 
                         return (
                             <Route
+                                exact
                                 key={index}
                                 path={route.path}
                                 element={
@@ -24,6 +30,7 @@ function App() {
                             />
                         );
                     })}
+                    <Route path="/" element={<Navigate to="/online" />} />
                 </Routes>
             </div>
         </Router>

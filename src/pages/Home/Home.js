@@ -40,7 +40,7 @@ function Home() {
                 polling: {
                     extraHeaders: {
                         'X-Mobicam-Token':
-                            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxNzk5MTE3NCwiZXhwIjoxNzE4MjUwMzc0fQ.UMy5aIHz4z6t4UTJ3Lqfc7h3wkXdfRS-a-Tp5Q4RdxQ',
+                            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxODI1MDU5NSwiZXhwIjoxNzE4NTA5Nzk1fQ.smD1pJI0lQgAeEPrX4E618vPt5k8g3ocUyI5nuFxuhs',
                     },
                 },
             },

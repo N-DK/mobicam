@@ -1,30 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Car } from '../Car';
+import { chunkArray } from '~/utils';
 
-function RouteCar({
-    data,
-    pointRoute,
-    speed,
-    play,
-    pointRouteRef,
-    rangeRef,
-    maxPage,
-    setPage,
-}) {
+function RouteCar({ props }) {
+    const {
+        data,
+        pointRoute,
+        speed,
+        play,
+        pointRouteRef,
+        rangeRef,
+        maxPage,
+        setPage,
+    } = props;
     const [point, setPoint] = useState(pointRoute);
     const [properties, setProperties] = useState();
-
-    const chunkArray = (myArray, chunk_size) => {
-        var index = 0;
-        var arrayLength = myArray?.length;
-        var tempArray = [];
-
-        for (index = 0; index < arrayLength; index += chunk_size) {
-            tempArray.push(myArray.slice(index, index + chunk_size));
-        }
-
-        return tempArray;
-    };
 
     const getPageByPointRoute = (pointRoute) => {
         const chunks = chunkArray(data, maxPage);
@@ -43,11 +33,11 @@ function RouteCar({
     }, [pointRoute]);
 
     useEffect(() => {
-        if (rangeRef) {
-            rangeRef.current.value = point;
-            const valPercent = (point / rangeRef.current.max) * 100;
-            rangeRef.current.style.background = `linear-gradient(to right, #3671f6 ${valPercent}%, #cccccc ${valPercent}%)`;
-        }
+        // if (rangeRef) {
+        //     rangeRef.current.value = point;
+        //     const valPercent = (point / rangeRef.current.max) * 100;
+        //     rangeRef.current.style.background = `linear-gradient(to right, #3671f6 ${valPercent}%, #cccccc ${valPercent}%)`;
+        // }
     }, [point]);
 
     useEffect(() => {

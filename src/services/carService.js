@@ -7,7 +7,7 @@ export const getListVehicles = async () => {
             {},
             {
                 headers: {
-                    'X-Mobicam-Token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxNzk5MTE3NCwiZXhwIjoxNzE4MjUwMzc0fQ.UMy5aIHz4z6t4UTJ3Lqfc7h3wkXdfRS-a-Tp5Q4RdxQ`,
+                    'X-Mobicam-Token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxODI1MDU5NSwiZXhwIjoxNzE4NTA5Nzk1fQ.smD1pJI0lQgAeEPrX4E618vPt5k8g3ocUyI5nuFxuhs`,
                 },
             },
         );
@@ -18,25 +18,13 @@ export const getListVehicles = async () => {
     }
 };
 
-export const getTrackList = async () => {
+export const getTrackList = async (payload) => {
     try {
-        const res = await requestV1.post(
-            'trackList',
-            {
-                startDate: '2024-06-12',
-                endDate: '2024-06-12',
-                startTime: '00:00:00',
-                endTime: '23:59:59',
-                company: 1,
-                devId: '08944FEE7T',
-                vid: '50G02648',
+        const res = await requestV1.post('trackList', payload, {
+            headers: {
+                'X-Mobicam-Token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxODI1MDU5NSwiZXhwIjoxNzE4NTA5Nzk1fQ.smD1pJI0lQgAeEPrX4E618vPt5k8g3ocUyI5nuFxuhs`,
             },
-            {
-                headers: {
-                    'X-Mobicam-Token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxNzk5MTE3NCwiZXhwIjoxNzE4MjUwMzc0fQ.UMy5aIHz4z6t4UTJ3Lqfc7h3wkXdfRS-a-Tp5Q4RdxQ`,
-                },
-            },
-        );
+        });
 
         return res.data;
     } catch (error) {
@@ -44,23 +32,13 @@ export const getTrackList = async () => {
     }
 };
 
-export const getPackingRp = async () => {
+export const getPackingRp = async (payload) => {
     try {
-        const res = await request.post(
-            'packingRp',
-            {
-                company: 1,
-                endTime: 1718125199,
-                licencePlate: ['50G02607'],
-                limit: 0,
-                startTime: 1718038800,
+        const res = await request.post('packingRp', payload, {
+            headers: {
+                'X-Mobicam-Token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxODI1MDU5NSwiZXhwIjoxNzE4NTA5Nzk1fQ.smD1pJI0lQgAeEPrX4E618vPt5k8g3ocUyI5nuFxuhs`,
             },
-            {
-                headers: {
-                    'X-Mobicam-Token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxNzk5MTE3NCwiZXhwIjoxNzE4MjUwMzc0fQ.UMy5aIHz4z6t4UTJ3Lqfc7h3wkXdfRS-a-Tp5Q4RdxQ`,
-                },
-            },
-        );
+        });
 
         return res.data;
     } catch (error) {

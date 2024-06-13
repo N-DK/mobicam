@@ -8,6 +8,18 @@ export const createClusterCustomIcon = function (cluster) {
     });
 };
 
+export const chunkArray = (myArray, chunk_size) => {
+    var index = 0;
+    var arrayLength = myArray?.length;
+    var tempArray = [];
+
+    for (index = 0; index < arrayLength; index += chunk_size) {
+        tempArray.push(myArray.slice(index, index + chunk_size));
+    }
+
+    return tempArray;
+};
+
 export const getDivIcon = (dir, state) => {
     const markerHtmlStyles = `
         width: 20px;

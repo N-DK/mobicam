@@ -6,5 +6,5 @@ export {
     VideoIcon,
     ImageIcon,
     RatioIcon,
-    SettingIcon
+    SettingIcon,
 } from './Icon';
