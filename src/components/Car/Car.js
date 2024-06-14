@@ -16,9 +16,11 @@ const Car = React.memo(({ data }) => {
 
     return (
         data && (
-            <Marker position={[data?.lat, data?.lng]} icon={icon}>
-                <Popup>{data?.name}</Popup>
-            </Marker>
+            <div className="transition-all">
+                <Marker position={[data?.lat, data?.lng]} icon={icon}>
+                    <Popup>{data?.name}</Popup>
+                </Marker>
+            </div>
         )
     );
 });

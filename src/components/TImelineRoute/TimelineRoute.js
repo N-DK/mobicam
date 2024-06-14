@@ -14,7 +14,7 @@ function TimelineRoute({ state, data }) {
     };
 
     return (
-        <div>
+        <div className='cursor-pointer'>
             <div>
                 <p className="font-semibold truncate">{data?.address}</p>
                 <Link className="text-sm">{data?.start_gps}</Link>
