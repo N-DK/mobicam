@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { publicRoutes } from './routes';
 import { DefaultLayout } from './components/layouts/DefaultLayout';
+import React from 'react';
 
 function App() {
     return (
@@ -14,7 +15,10 @@ function App() {
             <div>
                 <Routes>
                     {publicRoutes.map((route, index) => {
-                        const Layout = DefaultLayout;
+                        const Layout =
+                            route.layout === null
+                                ? React.Fragment
+                                : DefaultLayout;
                         const Page = route.component;
 
                         return (

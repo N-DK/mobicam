@@ -6,6 +6,7 @@ import { Car } from '~/components/Car';
 import { getListVehicles } from '~/services';
 import { createClusterCustomIcon } from '~/utils';
 import ReactLeafletGoogleLayer from 'react-leaflet-google-layer';
+import { MapWrapper } from '~/components/MapWrapper';
 
 const maps = [
     {
@@ -68,25 +69,35 @@ function Home() {
         fetch();
     }, []);
 
+    // <MapContainer
+    //                         center={[markers[0]?.lat, markers[0]?.lng]}
+    //                         zoom={13}
+    //                         scrollWheelZoom={true}
+    //                         zoomControl={false}
+    //                     >
+    //                         {/* <TileLayer
+    //                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    //                             url={`${map}`}
+    //                         /> */}
+    //                         <ReactLeafletGoogleLayer
+    //                             apiKey="AIzaSyA8A9yPeigR3I485ayAHKniugLw3OqXlS4"
+    //                             type={'satellite'}
+    //                         />
+    //                         <MarkerClusterGroup
+    //                             chunkedLoading
+    //                             iconCreateFunction={createClusterCustomIcon}
+    //                         >
+    //                             {markers?.map((marker, index) => (
+    //                                 <Car key={index} data={marker} />
+    //                             ))}
+    //                         </MarkerClusterGroup>
+    //                     </MapContainer>
     return (
         <div>
             {markers && (
                 <div>
                     <div className="w-screen h-screen">
-                        <MapContainer
-                            center={[markers[0]?.lat, markers[0]?.lng]}
-                            zoom={13}
-                            scrollWheelZoom={true}
-                            zoomControl={false}
-                        >
-                            {/* <TileLayer
-                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                url={`${map}`}
-                            /> */}
-                            <ReactLeafletGoogleLayer
-                                apiKey="AIzaSyA8A9yPeigR3I485ayAHKniugLw3OqXlS4"
-                                type={'satellite'}
-                            />
+                        <MapWrapper center={[markers[0]?.lat, markers[0]?.lng]}>
                             <MarkerClusterGroup
                                 chunkedLoading
                                 iconCreateFunction={createClusterCustomIcon}
@@ -95,7 +106,7 @@ function Home() {
                                     <Car key={index} data={marker} />
                                 ))}
                             </MarkerClusterGroup>
-                        </MapContainer>
+                        </MapWrapper>
                     </div>
                     <div className="flex-col fixed bottom-10 right-2 z-1000 w-max">
                         {maps.map((item) => (

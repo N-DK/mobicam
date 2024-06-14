@@ -1,4 +1,5 @@
 import {
+    faChevronRight,
     faFile,
     faMinus,
     faPause,
@@ -17,7 +18,15 @@ import {
 } from '~/services/carService';
 import styles from './Route.module.scss';
 import classNames from 'classnames/bind';
-import { RatioIcon, SettingIcon } from '~/icons';
+import {
+    AddressIcon,
+    GPSIcon,
+    LocationIcon,
+    RatioIcon,
+    RouteIcon,
+    SettingIcon,
+    SpeedIcon,
+} from '~/icons';
 import dayjs from 'dayjs';
 import {
     Button,
@@ -38,10 +47,12 @@ import {
     EnvironmentFilled,
 } from '@ant-design/icons';
 import { RouteCar } from '~/components/RouteCar';
-import { chunkArray } from '~/utils';
+import { chunkArray, formatTime } from '~/utils';
 import { SliderContainer } from '~/components/SliderContainer';
 import { TimelineRoute } from '~/components/TImelineRoute';
 import { Hotline } from 'react-leaflet-hotline';
+import { options } from '~/assets/constants.ts';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
 const { RangePicker } = DatePicker;
 
 const columns = [
@@ -145,9 +156,9 @@ function Route() {
         pointRouteRef.current = value;
     };
 
-    function dateTimeStringToUnixSeconds(dateTimeString) {
+    function dateTimeStringToUnixSeconds(dateTimeString, subText) {
         let [datePart, timePart] = dateTimeString.split(' ');
-        let [year, month, day] = datePart.split('-').map(Number);
+        let [year, month, day] = datePart.split(subText).map(Number);
         let [hours = 0, minutes = 0, seconds = 0] = (timePart || '00:00:00')
             .split(':')
             .map(Number);
@@ -220,6 +231,7 @@ function Route() {
                 `${createStartNEndTime(date)['endDate']} ${
                     createStartNEndTime(date)['endTime']
                 }`,
+                '-',
             ),
             licencePlate: [vid],
             limit: 0,
@@ -227,6 +239,7 @@ function Route() {
                 `${createStartNEndTime(date)['startDate']} ${
                     createStartNEndTime(date)['startTime']
                 }`,
+                '-',
             ),
         };
 
@@ -239,16 +252,21 @@ function Route() {
                 ]);
                 setPackingRp(packingRpRes?.data);
                 setData(createMileageForData(res?.data));
-                setWaypoints(res?.data?.map((point) => [point.lat, point.lng]));
-                // setWaypoints(
-                //     res?.data?.map((point) => [
-                //         {
-                //             lat: point.lat,
-                //             lng: point.lng,
-                //             speed: point.speed,
-                //         },
-                //     ]),
-                // );
+                // setWaypoints(res?.data?.map((point) => [point.lat, point.lng]));
+                setWaypoints(
+                    res?.data?.map((point) => ({
+                        lat: point.lat,
+                        lng: point.lng,
+                        value: point.speed,
+                    })),
+                );
+                console.log(
+                    res?.data?.map((point) => ({
+                        lat: point.lat,
+                        lng: point.lng,
+                        value: point.speed,
+                    })),
+                );
                 setCenter([res?.data[0].lat, res?.data[0].lng]);
                 setPlay(false);
                 setPointRoute(0);
@@ -278,39 +296,71 @@ function Route() {
         return arr;
     };
 
+    const totalFromTo = (startTime, endTime) => {
+        // var start = data?.findIndex((item) => item.time === startTime);
+        // var end = data?.findIndex((item) => item.time === endTime);
+
+        // if (endTime === dateTimeStringToUnixSeconds(date[1], '/'))
+        //     end = data.length - 1;
+        // console.log(data[end]?.mileage);
+        // return data[end]?.mileage - data[start]?.mileage;
+
+        var arr = [...data];
+        arr = arr.filter(
+            (item) => item.time >= startTime && item.time <= endTime,
+        );
+
+        return arr[arr.length - 2]?.mileage - arr[0]?.mileage;
+    };
+
     function groupByTotalTime(arr) {
         let results = [];
         let start = {
+            item: arr[0],
             total: arr[0]?.total_time,
             startTime: arr[0]?.start_time,
         };
+        arr = arr.filter((item) => item.total_time >= 300);
+        var cumulativeKilometers = 0;
         for (let i = 0; i < arr.length; i++) {
-            if (arr[i]?.address === arr[i + 1]?.address) {
+            if (
+                arr[i]?.address === arr[i + 1]?.address ||
+                haversineDistance(
+                    arr[i]?.start_gps?.split(',')[0],
+                    arr[i]?.start_gps?.split(',')[1],
+                    arr[i + 1]?.start_gps?.split(',')[0],
+                    arr[i + 1]?.start_gps?.split(',')[1],
+                ) <= 0.8
+            ) {
                 start.total += arr[i + 1]?.total_time;
             } else {
                 results.push({
-                    ...arr[i],
+                    ...start.item,
                     total_time: start.total,
                     start_time: start.startTime,
+                    cumulativeKilometers,
+                    end_time: arr[i].end_time,
                 });
+                const end_time = arr[i + 1]?.start_time
+                    ? arr[i + 1]?.start_time
+                    : dateTimeStringToUnixSeconds(date[1], '/');
+                const start_time = arr[i].end_time;
+                results.push({
+                    address: `${totalFromTo(start_time, end_time).toFixed(
+                        2,
+                    )} km di chuyển`,
+                    start_time,
+                    end_time,
+                    total_time: end_time - start_time,
+                    state: 'MOVE',
+                });
+                cumulativeKilometers += totalFromTo(start_time, end_time);
                 start = {
+                    item: arr[i + 1],
                     total: arr[i + 1]?.total_time,
                     startTime: arr[i + 1]?.start_time,
                 };
             }
-        }
-
-        var newArray = [];
-        for (let i = 0; i < results.length; i++) {
-            newArray.push(results[i]);
-            const total = results[i]?.total_time + results[i + 1]?.total_time;
-            const km = results[i]?.speed * total;
-            newArray.push({
-                address: `${km} km di chuyển`,
-                start_time: results[i].end_time,
-                end_time: results[i + 1]?.start_time,
-                total_time: total,
-            });
         }
 
         return results;
@@ -359,8 +409,8 @@ function Route() {
     }, [tabFirst]);
 
     return (
-        <div className="h-full">
-            <div className="h-full flex pt-12">
+        <div className="h-full ">
+            <div className="h-full flex pt-12 relative">
                 {/* left */}
                 <div className="w-[370px] bg-white shadow h-full pl-1 pr-1">
                     <div className="flex flex-col h-full">
@@ -455,31 +505,36 @@ function Route() {
                                                                                 data,
                                                                                 index,
                                                                             ) => {
-                                                                                if (
-                                                                                    data.total_time >=
-                                                                                    300
-                                                                                ) {
-                                                                                    return {
-                                                                                        dot: (
-                                                                                            <div className="flex w-5 h-5 rounded-sm justify-center bg-[#e74b3c] items-center text-white ">
-                                                                                                <span>
+                                                                                return {
+                                                                                    dot: (
+                                                                                        <div
+                                                                                            className={`flex w-5 h-5 rounded-sm justify-center ${
+                                                                                                data.state
+                                                                                                    ? 'bg-[#3671f6]'
+                                                                                                    : 'bg-[#e74b3c]'
+                                                                                            }  items-center text-white`}
+                                                                                        >
+                                                                                            <span>
+                                                                                                {data.state ? (
+                                                                                                    <CarFilled />
+                                                                                                ) : (
                                                                                                     <EnvironmentFilled />
-                                                                                                </span>
-                                                                                            </div>
+                                                                                                )}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    ),
+                                                                                    children:
+                                                                                        (
+                                                                                            <TimelineRoute
+                                                                                                state={
+                                                                                                    'STOP'
+                                                                                                }
+                                                                                                data={
+                                                                                                    data
+                                                                                                }
+                                                                                            />
                                                                                         ),
-                                                                                        children:
-                                                                                            (
-                                                                                                <TimelineRoute
-                                                                                                    state={
-                                                                                                        'STOP'
-                                                                                                    }
-                                                                                                    data={
-                                                                                                        data
-                                                                                                    }
-                                                                                                />
-                                                                                            ),
-                                                                                    };
-                                                                                }
+                                                                                };
                                                                             },
                                                                         )}
                                                                     />
@@ -525,7 +580,7 @@ function Route() {
                                                                                 data.length -
                                                                                     1
                                                                             ].mileage.toFixed(
-                                                                                2,
+                                                                                1,
                                                                             )}
                                                                             km
                                                                         </span>
@@ -550,10 +605,17 @@ function Route() {
                                                                             đỗ:
                                                                         </span>
                                                                         <span className="font-semibold">
-                                                                            8
-                                                                            giờ
-                                                                            9
-                                                                            phút
+                                                                            {formatTime(
+                                                                                parkingRp.reduce(
+                                                                                    (
+                                                                                        acc,
+                                                                                        item,
+                                                                                    ) =>
+                                                                                        acc +
+                                                                                        item.total_time,
+                                                                                    0,
+                                                                                ),
+                                                                            )}
                                                                         </span>
                                                                     </p>
                                                                     <p className="flex justify-between items-center">
@@ -592,7 +654,7 @@ function Route() {
                 <div className="flex-1 flex relative">
                     {/* Main */}
                     {mLvehi && (
-                        <div className="w-full">
+                        <div className="w-full relative">
                             <MapContainer
                                 center={
                                     mLvehi && [mLvehi[0].lat, mLvehi[0].lng]
@@ -602,67 +664,53 @@ function Route() {
                                 zoomControl={false}
                                 style={{ width: '100%', height: '100%' }}
                             >
-                                <SetMapCenter
-                                    center={
-                                        center
-                                            ? center
-                                            : [mLvehi[0].lat, mLvehi[0].lng]
-                                    }
-                                />
                                 <ReactLeafletGoogleLayer
                                     apiKey="AIzaSyA8A9yPeigR3I485ayAHKniugLw3OqXlS4"
                                     type={'satellite'}
                                 />
                                 {waypoints && data && (
                                     <>
-                                        <Polyline
+                                        {/* <Polyline
                                             positions={waypoints}
-                                            color="#cae84a"
+                                            color="#eb9136"
                                             weight={6}
-                                        />
+                                        /> */}
 
-                                        {/* <Hotline
+                                        <Hotline
                                             data={waypoints}
                                             getLat={(point) => point.lat}
                                             getLng={(point) => point.lng}
-                                            getVal={(point) => point.speed}
+                                            getVal={(point) => point.value}
                                             options={{
+                                                ...options,
+                                                tolerance: 10,
                                                 min: Math.min(
                                                     ...data?.map(
                                                         (point) => point.speed,
                                                     ),
                                                 ),
-                                                max: Math.max(
-                                                    ...data?.map(
-                                                        (point) => point.speed,
-                                                    ),
-                                                ),
-                                                weight: 10,
-                                                outlineWidth: 1,
-                                                outlineColor: '#cae84a',
-                                                palette: [
-                                                    {
-                                                        r: 0,
-                                                        g: 255,
-                                                        b: 0,
-                                                        t: 0,
-                                                    }, // green
-                                                    {
-                                                        r: 255,
-                                                        g: 255,
-                                                        b: 0,
-                                                        t: 0.5,
-                                                    }, // yellow
-                                                    {
-                                                        r: 255,
-                                                        g: 0,
-                                                        b: 0,
-                                                        t: 1,
-                                                    }, // red
-                                                ],
-                                                // palette: [],
+                                                max:
+                                                    Math.max(
+                                                        ...data?.map(
+                                                            (point) =>
+                                                                point.speed,
+                                                        ),
+                                                    ) ===
+                                                    Math.min(
+                                                        ...data?.map(
+                                                            (point) =>
+                                                                point.speed,
+                                                        ),
+                                                    )
+                                                        ? 1
+                                                        : Math.max(
+                                                              ...data?.map(
+                                                                  (point) =>
+                                                                      point.speed,
+                                                              ),
+                                                          ),
                                             }}
-                                        /> */}
+                                        />
                                         <RouteCar
                                             props={{
                                                 data: data,
@@ -677,10 +725,16 @@ function Route() {
                                         />
                                     </>
                                 )}
+                                <SetMapCenter
+                                    center={
+                                        center
+                                            ? center
+                                            : [mLvehi[0].lat, mLvehi[0].lng]
+                                    }
+                                />
                             </MapContainer>
                         </div>
                     )}
-
                     <div
                         className={`absolute z-1000 bg-white bottom-0 ${
                             toggleDetails ? 'h-[280px]' : 'h-10'
@@ -867,6 +921,66 @@ function Route() {
                             </div>
                         </div>
                     </div>
+                    {data && (
+                        <div
+                            onClick={(e) => e.stopPropagation()}
+                            className=" top-2 absolute right-2 w-[220px] text-[12px] bg-white z-[10000000000000000000] rounded shadow-lg px-2 py-2"
+                        >
+                            <div className="font-semibold border-b pb-1">
+                                <p>Thông tin thiết bị</p>
+                            </div>
+                            <div className="pt-2">
+                                <div className="bg-slate-200 rounded p-2 font-semibold mb-1">
+                                    {device?.split('|')[0]} - Xe tải các loại
+                                    {/* Xe tải các loại */}
+                                </div>
+                                <div className="flex items-center pt-2 pb-2">
+                                    <FontAwesomeIcon
+                                        icon={faClock}
+                                        fontSize={18}
+                                    />
+                                    <span className="font-semibold ml-2">
+                                        {data[pointRouteRef.current]?.timeT}
+                                    </span>
+                                </div>
+                                <div className="flex items-center pt-2 pb-2">
+                                    <SpeedIcon />
+                                    <span className="font-semibold ml-2">
+                                        {data[pointRouteRef.current]?.speed}{' '}
+                                        km/h
+                                    </span>
+                                </div>
+                                <div className="flex items-center pt-2 pb-2">
+                                    <GPSIcon />
+                                    <span className="font-semibold ml-2">
+                                        GPS tốt
+                                    </span>
+                                </div>
+                                <div className="flex items-center pt-2 pb-2">
+                                    <LocationIcon />
+                                    <span className="font-semibold ml-2">
+                                        {`${
+                                            data[pointRouteRef.current]?.lat
+                                        }, ${data[pointRouteRef.current]?.lng}`}
+                                    </span>
+                                </div>
+                                <div className="flex items-center pt-2 pb-2">
+                                    <AddressIcon />
+                                    <span className="font-semibold ml-2">
+                                        -
+                                    </span>
+                                </div>
+                                <div className="flex items-center pt-2 pb-2">
+                                    <RouteIcon />
+                                    <span className="font-semibold ml-2">
+                                        {`${data[
+                                            pointRouteRef.current
+                                        ]?.mileage.toFixed(2)} km`}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

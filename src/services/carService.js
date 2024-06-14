@@ -7,7 +7,9 @@ export const getListVehicles = async () => {
             {},
             {
                 headers: {
-                    'X-Mobicam-Token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxODI1MDU5NSwiZXhwIjoxNzE4NTA5Nzk1fQ.smD1pJI0lQgAeEPrX4E618vPt5k8g3ocUyI5nuFxuhs`,
+                    'X-Mobicam-Token': `${
+                        JSON.parse(localStorage.getItem('user')).accessToken
+                    }`,
                 },
             },
         );
@@ -22,7 +24,9 @@ export const getTrackList = async (payload) => {
     try {
         const res = await requestV1.post('trackList', payload, {
             headers: {
-                'X-Mobicam-Token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxODI1MDU5NSwiZXhwIjoxNzE4NTA5Nzk1fQ.smD1pJI0lQgAeEPrX4E618vPt5k8g3ocUyI5nuFxuhs`,
+                'X-Mobicam-Token': `${
+                    JSON.parse(localStorage.getItem('user')).accessToken
+                }`,
             },
         });
 
@@ -36,7 +40,9 @@ export const getPackingRp = async (payload) => {
     try {
         const res = await request.post('packingRp', payload, {
             headers: {
-                'X-Mobicam-Token': `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjQ1LCJhcHAiOiJtaWR2biIsImxldmVsIjowLCJjb21JRCI6LTEsImlhdCI6MTcxODI1MDU5NSwiZXhwIjoxNzE4NTA5Nzk1fQ.smD1pJI0lQgAeEPrX4E618vPt5k8g3ocUyI5nuFxuhs`,
+                'X-Mobicam-Token': `${
+                    JSON.parse(localStorage.getItem('user')).accessToken
+                }`,
             },
         });
 

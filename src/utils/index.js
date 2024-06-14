@@ -20,6 +20,26 @@ export const chunkArray = (myArray, chunk_size) => {
     return tempArray;
 };
 
+export const formatTime = (totalSeconds) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    let formattedTime = '';
+    if (hours > 0) {
+        formattedTime += `${hours} giờ `;
+    }
+    if (minutes > 0) {
+        formattedTime += `${minutes} phút `;
+    }
+    if (seconds > 0) {
+        formattedTime += `${seconds} giây`;
+    }
+    if (formattedTime === '') {
+        formattedTime = '0 giây';
+    }
+    return formattedTime;
+};
+
 export const getDivIcon = (dir, state) => {
     const markerHtmlStyles = `
         width: 20px;

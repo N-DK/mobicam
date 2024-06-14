@@ -1,28 +1,9 @@
 import { faCalendar, faClock } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import { formatTime } from '~/utils';
 
 function TimelineRoute({ state, data }) {
-    const formatTime = (totalSeconds) => {
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-        let formattedTime = '';
-        if (hours > 0) {
-            formattedTime += `${hours} giờ `;
-        }
-        if (minutes > 0) {
-            formattedTime += `${minutes} phút `;
-        }
-        if (seconds > 0) {
-            formattedTime += `${seconds} giây`;
-        }
-        if (formattedTime === '') {
-            formattedTime = '0 giây';
-        }
-        return formattedTime;
-    };
-
     const formatDate = (timestamp) => {
         const date = new Date(timestamp * 1000);
         const hours = String(date.getHours()).padStart(2, '0');
@@ -51,7 +32,8 @@ function TimelineRoute({ state, data }) {
                         </div>
                         {data.devid && (
                             <p className="font-semibold text-sm mt-1">
-                                Km tích lũy: 0.00 km
+                                Km tích lũy:{' '}
+                                {data?.cumulativeKilometers.toFixed(2)} km
                             </p>
                         )}
                     </div>

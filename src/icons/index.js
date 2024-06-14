@@ -7,4 +7,11 @@ export {
     ImageIcon,
     RatioIcon,
     SettingIcon,
+    AddressIcon,
+    LocationIcon,
+    GPSIcon,
+    SpeedIcon,
+    TCVNICon,
+    ISOICon,
+    QCVNICon,
 } from './Icon';

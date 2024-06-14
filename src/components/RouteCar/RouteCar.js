@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Car } from '../Car';
 import { chunkArray } from '~/utils';
+import { MapContainer, Polyline, useMap } from 'react-leaflet';
 
 function RouteCar({ props }) {
     const {
@@ -15,6 +16,8 @@ function RouteCar({ props }) {
     } = props;
     const [point, setPoint] = useState(pointRoute);
     const [properties, setProperties] = useState();
+
+    const map = useMap();
 
     const getPageByPointRoute = (pointRoute) => {
         const chunks = chunkArray(data, maxPage);
@@ -76,7 +79,15 @@ function RouteCar({ props }) {
         }
     }, [data, speed, play]);
 
-    return <div>{properties && <Car data={properties} />}</div>;
+    return (
+        <div>
+            {properties && (
+                <>
+                    <Car data={properties} />
+                </>
+            )}
+        </div>
+    );
 }
 
 export default RouteCar;

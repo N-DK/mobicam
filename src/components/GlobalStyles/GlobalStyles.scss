@@ -182,7 +182,6 @@ input[type='range']::-webkit-slider-thumb {
 .ant-table-tbody > tr > td {
     height: 5px !important;
     padding: 4px !important;
-    
 }
 /* row tags */
 .my-tag {
@@ -198,3 +197,28 @@ input[type='range']::-webkit-slider-thumb {
 .text-xxs {
     font-size: 13px;
 }
+.fill-theme {
+    fill: #1673ff;
+}
+
+.hover\:hover-fill-svg:hover {
+    --tw-scale-x: 1.1;
+    --tw-scale-y: 1.1;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+        rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+        scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    cursor: pointer;
+    background-color: #1673ff;
+    fill: white;
+}
+// .overlay-container {
+//     position: absolute;
+//     top: 10px;
+//     right: 10px;
+//     z-index: 1000; /* Ensure it's on top of the map */
+//     background: rgba(255, 255, 255, 0.9);
+//     padding: 10px;
+//     border-radius: 8px;
+//     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+//     pointer-events: auto; /* Ignore pointer events */
+// }
